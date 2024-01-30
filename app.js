@@ -53,7 +53,7 @@ hangUpButton.addEventListener("click", () => {
 
 const incomingCallHandler = async (args) => {
     const incomingCall = args.incomingCall;
-  
+    console.log("CALL ACCEPTED")
     // Accept the call
     await incomingCall.accept();
   
