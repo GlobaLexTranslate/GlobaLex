@@ -1,64 +1,40 @@
-import { CallClient } from "@azure/communication-calling";
+import { CallClient, CallAgent } from "@azure/communication-calling";
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-
-const userToken = document.getElementById("token-input"); 
-const submitToken = document.getElementById("token-submit");
-
-const calleeInput = document.getElementById("callee-id-input");
-
-const callButton = document.getElementById("call-button");
-const hangUpButton = document.getElementById("hang-up-button");
 
 let call;
 let callAgent;
-let tokenCredential;
 
+const calleePhoneInput = document.getElementById("callee-phone-input");
+const callPhoneButton = document.getElementById("call-phone-button");
+const hangUpPhoneButton = document.getElementById("hang-up-phone-button");
 
-submitToken.addEventListener("click", async () => {
+async function init() {
     const callClient = new CallClient();
-    const userTokenCredential = userToken.value;
-        try {
-            tokenCredential = new AzureCommunicationTokenCredential(userTokenCredential);
-            callAgent = await callClient.createCallAgent(tokenCredential);
-            callAgent.on('incomingCall', incomingCallHandler);
+    const tokenCredential = new AzureCommunicationTokenCredential('eyJhbGciOiJSUzI1NiIsImtpZCI6IjYwNUVCMzFEMzBBMjBEQkRBNTMxODU2MkM4QTM2RDFCMzIyMkE2MTkiLCJ4NXQiOiJZRjZ6SFRDaURiMmxNWVZpeUtOdEd6SWlwaGsiLCJ0eXAiOiJKV1QifQ.eyJza3lwZWlkIjoiYWNzOmJlYjI4OWZjLWJhODUtNDYwOC04Mzg3LTMyNTViNGZiMDdhYV8wMDAwMDAxZC1mODk3LTU5NGItMGNmOS05YzNhMGQwMDc0YzgiLCJzY3AiOjE3OTIsImNzaSI6IjE3MDY1OTAzMTkiLCJleHAiOjE3MDY2NzY3MTksInJnbiI6ImFtZXIiLCJhY3NTY29wZSI6InZvaXAiLCJyZXNvdXJjZUlkIjoiYmViMjg5ZmMtYmE4NS00NjA4LTgzODctMzI1NWI0ZmIwN2FhIiwicmVzb3VyY2VMb2NhdGlvbiI6InVuaXRlZHN0YXRlcyIsImlhdCI6MTcwNjU5MDMxOX0.OT2h6Yux_jscacGjinBBWMOirUMn-Yg15aFLeP3-JXe7QWi2E5dEbbpLMEO273rjl0i7s4HhE1NPw3PTFYPO8etJSGnJK4fV2jFPGSxbkbXUadqWvMSFZ_8Gi2gCzl_lc7FjGoQ94WHSKi31oYNvsMLSC8geH6n-T0GqHM68wbW2J2C0sIBA7aq5Twv05I1Od0ZYpAowAxCCs6uw2nu1IShq989MGDtjD516vci4jOPCHj0n8g4C4TNpHwFXsj7nx-OumkI9eGM1yBgKTMt3-UONSm4eOcbiLY8m7HPQRJM1hWIxwbGKPkVzfyQxpc7AG_Dc0utC9ZJpKpnJ4hakvA');
+    callAgent = await callClient.createCallAgent(tokenCredential);
+    //callPhoneButton.disabled = false;
+}
 
-            callButton.disabled = false;
-            submitToken.disabled = true;
-        } catch(error) {
-            window.alert("Please submit a valid token!");
-        }
-})
+init();
 
-callButton.addEventListener("click", () => {
-    // start a call
-    const userToCall = calleeInput.value;
+callPhoneButton.addEventListener("click", () => {
+    // start a call to phone
+    const phoneToCall = calleePhoneInput.value;
     call = callAgent.startCall(
-        [{ id: userToCall }],
-        {}
-    );
-  
-    // toggle button states
-    hangUpButton.disabled = false;
-    callButton.disabled = true;
-});
-
-hangUpButton.addEventListener("click", () => {
-    // end the current call
-    call.hangUp({ forEveryone: true });
-  
-    // toggle button states
-    hangUpButton.disabled = true;
-    callButton.disabled = false;
-});
-
-const incomingCallHandler = async (args) => {
-    const incomingCall = args.incomingCall;
-    console.log("CALL ACCEPTED")
-    // Accept the call
-    await incomingCall.accept();
-  
-    // Subscribe to callEnded event and get the call end reason
-    incomingCall.on('callEnded', args => {
-        console.log(args.callEndReason);
+      [{phoneNumber: phoneToCall}], { alternateCallerId: {phoneNumber: 'YOUR AZURE REGISTERED PHONE NUMBER HERE: +12223334444'}
     });
-};
+    // toggle button states
+    hangUpPhoneButton.disabled = false;
+    callPhoneButton.disabled = true;
+});
+
+hangUpPhoneButton.addEventListener("click", () => {
+// end the current call
+call.hangUp({
+    forEveryone: true
+});
+
+// toggle button states
+hangUpPhoneButton.disabled = true;
+callPhoneButton.disabled = false;
+});
