@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <title>Login Page</title>
+  <script>
+    function redirectToCallPage() {
+      document.write(callPageHtml);
+      document.close();
+    }
+    var callPageHtml = `<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <title>Call Page</title>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul><li><strong>GLOBALEX</strong></li></ul>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" role="button">Contact</a></li>
+    </ul>
+  </nav>
+  <main class="container">
+    <div class="grid">
+      <section>
+        <hgroup>
+          <h2>Contact Book</h2>
+        </hgroup>
+        <div>
+          <ul>
+            <li>Bob Jones</li>
+            <li>Amy Ho</li>
+            <li>Mehul Goel</li>
+            <li>Utsav Kataria</li>
+            <li>Arjun Iyer</li>
+          </ul>
+        </div>
+        <div>
+          <h3>CALLING...</h3>
+          <p>Mehul Goel</p>
+          <label for="language">Your Language</label>
+          <select id="language" name="language">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+          </select>
+          <button type="button">CALL</button>
+          <button type="button">HANG UP</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="container">
+    <small><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></small>
+  </footer>
+</body>
+</html>`;
+  </script>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul><li><strong>GLOBALEX</strong></li></ul>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" role="button">Contact</a></li>
+    </ul>
+  </nav>
+  <main class="container">
+    <div class="grid">
+      <section>
+        <hgroup>
+          <h1>HELLO THERE!</h1>
+          <h2>LOGIN</h2>
+        </hgroup>
+        <form onsubmit="event.preventDefault(); redirectToCallPage();">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Your email" required>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Your password" required>
+          <button type="submit">SIGN IN</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer class="container">
+    <small><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></small>
+  </footer>
+</body>
+</html>
