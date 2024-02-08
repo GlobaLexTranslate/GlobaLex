@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 // Use authentication routes
-app.use(authRoutes); 
+app.use(authRoutes);
 
 // Redirect root URL to Login.html
 app.get('/', (req, res) => {

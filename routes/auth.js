@@ -9,7 +9,7 @@ router.post('/api/register', async (req, res) => {
     console.log('User registered:', { name, email, hashedPassword });
     res.status(201).send('User registered successfully');
 });
- 
+
 // POST /login
 router.post('/api/login', async (req, res) => {
     // Placeholder for authentication logic
