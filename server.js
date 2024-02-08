@@ -1,35 +1,25 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const passportSetup = require('./config/passport-setup');
+const bodyParser = require('body-parser');
+const path = require('path');
 const authRoutes = require('./routes/auth');
-const cookieSession = require('cookie-session');
 
 const app = express();
 const port = 3000;
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-  keys: [process.env.SESSION_COOKIE_KEY]
-}));
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
 
-// Initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
+// Use authentication routes
+app.use(authRoutes);
 
-// Set up routes
-app.use('/auth', authRoutes);
-
+// Redirect root URL to Login.html
 app.get('/', (req, res) => {
-  res.send('Home Page');
+    res.redirect('/Login.html');
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
