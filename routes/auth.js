@@ -1,20 +1,21 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const router = express.Router();
+const router = require('express').Router();
+const passport = require('passport');
 
-// POST /register
-router.post('/api/register', async (req, res) => {
-    const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('User registered:', { name, email, hashedPassword });
-    res.status(201).send('User registered successfully');
+router.get('/login', (req, res) => {
+  res.send('Login Page');
 });
- 
-// POST /login
-router.post('/api/login', async (req, res) => {
-    // Placeholder for authentication logic
-    console.log('User login attempt:', req.body);
-    res.send('Login successful');
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
+
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
+
+router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+  res.redirect('/profile'); // Redirect to a profile page or wherever you like
 });
 
 module.exports = router;
