@@ -10,9 +10,10 @@ const {exec} = require('child_process');
 const cookieSession = require('cookie-session');
 const cors = require('cors'); // Make sure to install with npm install cors
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const port = 3010;
 
 app.use(cors()); // Use CORS to avoid cross-origin issues
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,10 +23,6 @@ app.use(express.json()); // Parse JSON bodies
 mongoose.connect('mongodb://localhost:27017/GlobaLex')
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 
 // Set up Multer for handling file uploads
 const storage = multer.diskStorage({
@@ -110,3 +107,47 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+// Streaming wav file
+
+app.get('/stream', (req, res) => {
+    const file = __dirname + '/audio/not-translated_translated.wav';
+    const stat = fs.statSync(file);
+    const total = stat.size;
+    if (req.headers.range) {
+
+    }
+    fs.exists(file, (exists) => {
+        if (exists) {
+            const range = req.headers.range;
+            const parts = range.replace(/bytes=/, '').split('-');
+            const partialStart = parts[0];
+            const partialEnd = parts[1];
+
+            const start = parseInt(partialStart, 10);
+            const end = partialEnd ? parseInt(partialEnd, 10) : total - 1;
+            const chunksize = (end - start) + 1;
+            const rstream = fs.createReadStream(file, {start: start, end: end});
+
+            res.writeHead(206, {
+                'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
+                'Accept-Ranges': 'bytes', 'Content-Length': chunksize,
+                'Content-Type': 'audio/wav'
+            });
+            rstream.pipe(res);
+
+        } else {
+            res.send('Error - 404');
+            res.end();
+            // res.writeHead(200, { 'Content-Length': total, 'Content-Type': 'audio/mpeg' });
+            // fs.createReadStream(path).pipe(res);
+        }
+    });
+});
+
+app.get('/download', (req, res) => {
+    const file = __dirname + '/audio/not-translated_translated.wav';
+    res.download(file);
+});
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'));

@@ -59,12 +59,20 @@
           </form>
           <script>
             function play() {
-              var audio = new Audio('audio/not-translated_translated.wav');
-              console.log("PLAYING");
-              audio.play();
+              // const button = document.querySelector('#audioButton');
+              const audioPlay = document.querySelector('#playAudio');
+              let output = ''
+              output = `<audio controls="controls">
+                          <source src="http://localhost:3000/stream" type="audio/ogg" />
+                          <source src="http://localhost:3000/stream" type="audio/mpeg" />
+                          Your browser does not support the audio element.
+                        </audio>`;
+              console.log(output)
+              audioPlay.innerHTML = output;         
             }
           </script>
-          <button onclick = "play()" type="submit" id="Audio" type="PlayAudio">Play Translated Audio</button>
+          <button onclick = "play()" type="submit" id="audioButton" type="audioButton">Play Translated Audio</button>
+          <div id="playAudio"></div>
         </div>
       </section>
     </div>
