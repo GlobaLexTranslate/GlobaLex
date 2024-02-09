@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); // Parse JSON bodies
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/GlobaLex')
+mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
 
@@ -98,11 +98,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Set up routes
-app.use('/auth', authRoutes);
+app.use('/api', authRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
-});
+    res.sendFile(path.join(__dirname, 'public', 'Login.html'));
+  });
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
