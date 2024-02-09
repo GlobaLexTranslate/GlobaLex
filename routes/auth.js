@@ -1,14 +1,24 @@
 // routes/auth.js
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const User = require('../models/user');
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const identity = uuidv4(); 
         const user = new User({ email: req.body.email, password: hashedPassword });
         const savedUser = await user.save();
+
+        const token = jwt.sign(
+            { userId: savedUser._id, email: savedUser.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
         res.status(201).send({ message: 'User created', userId: savedUser._id });
     } catch (error) {
         console.error(error);
@@ -27,6 +37,11 @@ router.post('/login', async (req, res) => {
     }
     try {
         if (await bcrypt.compare(req.body.password, user.password)) {
+            const token = jwt.sign(
+                { userId: user._id, email: user.email },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             res.send('Success');
         } else {
             res.send('Not Allowed');
