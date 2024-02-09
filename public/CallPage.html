@@ -40,8 +40,29 @@
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>
           </select>
-          <button type="button">CALL</button>
-          <button type="button">HANG UP</button>
+          <input 
+              id="token-input"
+              type="text"
+              placeholder="Your User access token"
+          />
+          <button id="token-submit" type="button">
+              Submit
+          </button>
+          <br /><br />
+          <input 
+              id="callee-id-input"
+              type="text"
+              placeholder="Who would you like to call?"
+              style="margin-bottom:1em; width: 200px; display: block;"
+          />
+          <button id="call-button" type="button" disabled="true">
+              Start Call
+          </button>
+          &nbsp;
+          <button id="hang-up-button" type="button" disabled="true">
+              Hang Up
+          </button>
+          <script src="../app.js" type="module"></script>
         </div>
         <div>
           <form id="uploadForm" enctype="multipart/form-data" method="POST" action="/upload">
