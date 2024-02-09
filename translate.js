@@ -1,6 +1,9 @@
 const fs = require("fs");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 var readline = require("readline");
+const getCmdArgs = () => process.argv.slice(2);
+const input = getCmdArgs()[0];
+const output = getCmdArgs()[1];
 
 // This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
 const speechTranslationConfig = sdk.SpeechTranslationConfig.fromSubscription("2584f84c71714df4be0761c094ed770b", "eastus");
@@ -134,6 +137,4 @@ function fromFile(inputAudio, outputAudio) {
     });
 };
 
-
-// tts("HEEEEELP");
-fromFile("audio/the-gettysburg-address.wav", "audio/OSR_us_000_0034_8k_TRANSLATED.wav");
+fromFile(input, output);
